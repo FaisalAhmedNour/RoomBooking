@@ -13,5 +13,5 @@ const updateSlotBooking = async(slots: string[]) =>{
 
 export const bookingService = {
     createBooking,
-    updateSlotBooking
+    updateSlotBooking 
 }

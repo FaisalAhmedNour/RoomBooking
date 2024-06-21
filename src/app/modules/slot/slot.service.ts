@@ -5,21 +5,29 @@ const createSlots = async (slot: any) => {
   return result;
 };
 
-const findSlotsByDateAndRoomId = async ({ room, date }: any) => {
-  if (room && date) {
-    const result = SlotModel.find({ room, date, isBooked: true });
-    return result;
-  } else if (room) {
-    const result = SlotModel.find({ room, isBooked: true });
-    return result;
-  } else if (date) {
-    const result = SlotModel.find({ date, isBooked: true });
-    return result;
-  } else {
-    const result = SlotModel.find({ isBooked: true });
-    return result;
+const findSlotsByDateAndRoomId = async ({
+  room,
+  date,
+}: {
+  room?: string;
+  date?: string;
+}) => {
+  const query: { isBooked: boolean; room?: string; date?: string } = {
+    isBooked: true,
+  };
+
+  if (room) {
+    query.room = room;
   }
+
+  if (date) {
+    query.date = date;
+  }
+
+  const result = await SlotModel.find(query).populate('room');
+  return result;
 };
+
 export const slotService = {
   createSlots,
   findSlotsByDateAndRoomId,

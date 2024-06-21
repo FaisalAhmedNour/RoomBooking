@@ -42,12 +42,13 @@ const createSlot = async (req: Request, res: Response) => {
 
 const getSlot = async (req: Request, res: Response) => {
   try {
-    const { roomId, date } = req.query;
-    //todo: SEE THE DOC AGAIN AND SOLVE IT
+    const { roomId, date }: { roomId?: string; date?: string } = req.query;
+
     const slots = await slotService.findSlotsByDateAndRoomId({
       room: roomId,
       date,
     });
+
     if (slots.length === 0) {
       res.status(404).json({
         success: false,
@@ -73,27 +74,7 @@ const getSlot = async (req: Request, res: Response) => {
   }
 };
 
-// const deleteSlot = async (req: Request, res: Response) => {
-//   try {
-//     const deletedSlot = await SlotModel.findByIdAndDelete(req.params.id);
-//     res.status(200).json({
-//       success: true,
-//       statusCode: 200,
-//       message: 'Slot deleted successfully',
-//       data: deletedSlot,
-//     });
-//   } catch (error) {
-//     res.status(400).json({
-//       success: false,
-//       statusCode: 400,
-//       message: 'Error deleting slot',
-//       error,
-//     });
-//   }
-// };
-
 export const slotContollers = {
   createSlot,
   getSlot,
-  // deleteSlot,
 };

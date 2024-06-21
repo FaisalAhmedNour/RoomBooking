@@ -5,14 +5,14 @@ import { bookingService } from './booking.service';
 
 const createBooking = async (req: Request, res: Response) => {
   try {
-    const { room, slots, user, totalAmount } = req.body;
+    const { room, slots, user, date } = req.body;
 
     const newBooking = await bookingService.createBooking({
       room,
       slots,
-      user,
-      date: new Date(),
-      totalAmount,
+      user, 
+      // date: new Date(),
+      date,
     });
     await bookingService.updateSlotBooking(slots);
     if(newBooking){
