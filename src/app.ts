@@ -1,13 +1,35 @@
-import express, { Application, Request, Response } from "express";
-import cors from 'cors'
+import cors from 'cors';
+import express, { Application, Request, Response } from 'express';
+import { userRouter } from './app/modules/user/user.route';
+import { roomRouter } from './app/modules/room/room.route';
+import { slotRouter } from './app/modules/slot/slot.route';
+import { bookingRouter } from './app/modules/booking/booking.route';
 
 const app: Application = express();
 
 app.use(express.json());
 app.use(cors());
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
-});
+// routes
+app.use('/api/auth', userRouter);
+app.use('/api/rooms', roomRouter);
+app.use('/api/slots', slotRouter);
+app.use('/api/bookings', bookingRouter);
+
+const getAController = (req: Request, res: Response) => {
+  res.send("server is Running...");
+};
+
+app.get('/', getAController);
+
+app.get('*', (req,res) =>{
+  res.status(404).json(
+    {
+      "success": false,
+      "statusCode": 404,
+      "message": "Not Found",
+    }
+  )
+})
 
 export default app;
