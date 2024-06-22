@@ -140,7 +140,7 @@ const deleteBookingById = async (req: Request, res: Response) => {
         statusCode: 200,
         message: 'Booking deleted successfully',
         data: modifiedBooking,
-      });
+      });   
     } else {
       res.status(400).json({
         success: true,
