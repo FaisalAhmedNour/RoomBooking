@@ -1,8 +1,20 @@
 import { Request, Response } from 'express';
 import { slotService } from './slot.service';
+import { slotValidationSchema } from './slot.interface';
 
 const createSlot = async (req: Request, res: Response) => {
   try {
+    const validation = slotValidationSchema.safeParse(req.body);
+
+    if (!validation.success) {
+      return res.status(400).json({
+        success: false,
+        statusCode: 400,
+        message: 'Invalid slot data',
+        error: validation.error.errors,
+      });
+    }
+
     const { room, date, startTime, endTime } = req.body;
 
     const start = new Date(`${date}T${startTime}:00Z`);

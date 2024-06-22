@@ -1,10 +1,22 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { TUser } from './user.interface';
+import { TUser, userValidationSchema } from './user.interface';
 import { userServices } from './user.service';
 
 export const signUp = async (req: Request, res: Response) => {
+
+  const validation = userValidationSchema.safeParse(req.body);
+
+    if (!validation.success) {
+      return res.status(400).json({
+        success: false,
+        statusCode: 400,
+        message: 'Invalid user data',
+        error: validation.error.errors,
+      });
+    }
+
   const { name, email, password, phone, address, role }: TUser = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
   try {
@@ -14,7 +26,7 @@ export const signUp = async (req: Request, res: Response) => {
       password: hashedPassword,
       phone,
       address,
-      role,
+      role, 
     });
 
     if (user) {

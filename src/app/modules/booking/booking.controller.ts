@@ -8,7 +8,7 @@ const createBooking = async (req: Request, res: Response) => {
     const newBooking = await bookingService.createBooking({
       room,
       slots,
-      user,
+      user, 
       date: new Date(date),
     });
 
@@ -106,7 +106,7 @@ const updateBookingById = async (req: Request, res: Response) => {
       res.status(200).json({
         success: true,
         statusCode: 200,
-        message: 'Bookings retrieved successfully',
+        message: 'Bookings retrieved successfully', 
         data: modifiedBooking,
       });
     } else {

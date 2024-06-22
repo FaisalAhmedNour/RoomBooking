@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import { roomService } from './room.service';
+import { roomValidationSchema } from './room.interface';
 
- const getAllRooms = async (req: Request, res: Response) => {
+const getAllRooms = async (req: Request, res: Response) => {
   try {
     const room = await roomService.findAllRooms();
     if (room.length === 0) {
@@ -28,11 +29,22 @@ import { roomService } from './room.service';
   }
 };
 
- const createRoom = async (req: Request, res: Response) => {
+const createRoom = async (req: Request, res: Response) => {
   const roomData = req.body;
 
   try {
     const room = await roomService.createRoom(roomData);
+
+    const validation = roomValidationSchema.safeParse(roomData);
+
+    if (!validation.success) {
+      return res.status(400).json({
+        success: false,
+        statusCode: 400,
+        message: 'Invalid room data',
+        error: validation.error.errors,
+      });
+    }
 
     if (room) {
       res.status(200).json({
@@ -59,7 +71,7 @@ import { roomService } from './room.service';
   }
 };
 
- const getRoom = async (req: Request, res: Response) => {
+const getRoom = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
@@ -89,7 +101,7 @@ import { roomService } from './room.service';
   }
 };
 
- const updateRoom = async (req: Request, res: Response) => {
+const updateRoom = async (req: Request, res: Response) => {
   const { id } = req.params;
   const updateData = req.body;
 
@@ -121,7 +133,7 @@ import { roomService } from './room.service';
   }
 };
 
- const deleteRoom = async (req: Request, res: Response) => {
+const deleteRoom = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
@@ -151,11 +163,10 @@ import { roomService } from './room.service';
   }
 };
 
-
 export const roomController = {
   getAllRooms,
   createRoom,
   getRoom,
   updateRoom,
-  deleteRoom
-}
+  deleteRoom,
+};
