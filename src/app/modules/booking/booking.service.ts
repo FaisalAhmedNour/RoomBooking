@@ -48,13 +48,26 @@ const getAllBookings = async () => {
 const getMyBookings = async (id: string) => {
   const result = await BookingModel.find({ user: id })
     .populate('room')
-    .populate('slots');
-    return result;
+    .populate('slots')
+    .select('-user');
+  return result;
+};
+
+const updateBookingById = async (id: string, data: any) => {
+  const result = await BookingModel.updateOne({ _id: id }, data);
+  return result;
+};
+
+const getBookingById = async (id: string) => {
+  const result = await BookingModel.findById(id);
+  return result;
 };
 
 export const bookingService = {
   createBooking,
   updateSlotBooking,
   getAllBookings,
-  getMyBookings
+  getMyBookings,
+  updateBookingById,
+  getBookingById
 };

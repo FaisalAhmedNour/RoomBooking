@@ -1,6 +1,4 @@
 import { Request, Response } from 'express';
-import SlotModel from '../slot/slot.model';
-import BookingModel from './booking.model';
 import { bookingService } from './booking.service';
 import { UserRequest } from '../../../Middlewares/auth';
 
@@ -98,17 +96,27 @@ const getMyBookings = async (req: UserRequest, res: Response) => {
   }
 };
 
-const getBookingByUserId = async (req: Request, res: Response) => {
+const updateBookingById = async (req: Request, res: Response) => {
   try {
-    const bookings = await BookingModel.find({ user: req.params.userId })
-      .populate('room')
-      .populate('slots');
-    res.status(200).json({
-      success: true,
-      statusCode: 200,
-      message: 'Bookings retrieved successfully',
-      data: bookings,
-    });
+    const id = req.params.id;
+    const bookings = await bookingService.updateBookingById(id, req.body);
+
+    if (bookings.modifiedCount > 0) {
+      const modifiedBooking = await bookingService.getBookingById(id);
+      res.status(200).json({
+        success: true,
+        statusCode: 200,
+        message: 'Bookings retrieved successfully',
+        data: modifiedBooking,
+      });
+    } else {
+      res.status(400).json({
+        success: true,
+        statusCode: 400,
+        message: 'Bookings retrieving unsuccessful',
+        error: '',
+      });
+    }
   } catch (error) {
     res.status(400).json({
       success: false,
@@ -119,28 +127,28 @@ const getBookingByUserId = async (req: Request, res: Response) => {
   }
 };
 
-const cancelBookingById = async (req: Request, res: Response) => {
+const deleteBookingById = async (req: Request, res: Response) => {
   try {
-    const booking = await BookingModel.findById(req.params.id);
-    if (!booking) {
-      return res.status(404).json({
-        success: false,
-        statusCode: 404,
-        message: 'Booking not found',
+    const id = req.params.id;
+    const bookings = await bookingService.updateBookingById(id, {
+      isDeleted: true,
+    });
+    if (bookings.modifiedCount > 0) {
+      const modifiedBooking = await bookingService.getBookingById(id);
+      res.status(200).json({
+        success: true,
+        statusCode: 200,
+        message: 'Booking deleted successfully',
+        data: modifiedBooking,
+      });
+    } else {
+      res.status(400).json({
+        success: true,
+        statusCode: 400,
+        message: 'Bookings deleting unsuccessful',
+        error: '',
       });
     }
-    booking.isConfirmed = 'canceled';
-    await booking.save();
-    await SlotModel.updateMany(
-      { _id: { $in: booking.slots } },
-      { isBooked: false },
-    );
-    res.status(200).json({
-      success: true,
-      statusCode: 200,
-      message: 'Booking canceled successfully',
-      data: booking,
-    });
   } catch (error) {
     res.status(400).json({
       success: false,
@@ -153,8 +161,8 @@ const cancelBookingById = async (req: Request, res: Response) => {
 
 export const bookingContollers = {
   createBooking,
-  getBookingByUserId,
-  cancelBookingById,
+  updateBookingById,
+  deleteBookingById,
   getBookings,
   getMyBookings,
 };
