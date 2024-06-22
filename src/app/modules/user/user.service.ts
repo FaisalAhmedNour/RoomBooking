@@ -8,7 +8,7 @@ const createUser = async (user: TUser) => {
 
 const findUserByEmail = async ({ email }: { email: string }) => {
   const result = await UserModel.findOne({ email });
-  return result
+  return result;
 };
 
 export const userServices = {

@@ -4,18 +4,17 @@ import bcrypt from 'bcryptjs';
 import { TUser, userValidationSchema } from './user.interface';
 import { userServices } from './user.service';
 
-export const signUp = async (req: Request, res: Response) => {
-
+const signUp = async (req: Request, res: Response) => {
   const validation = userValidationSchema.safeParse(req.body);
 
-    if (!validation.success) {
-      return res.status(400).json({
-        success: false,
-        statusCode: 400,
-        message: 'Invalid user data',
-        error: validation.error.errors,
-      });
-    }
+  if (!validation.success) {
+    return res.status(400).json({
+      success: false,
+      statusCode: 400,
+      message: 'Invalid user data',
+      error: validation.error.errors,
+    });
+  }
 
   const { name, email, password, phone, address, role }: TUser = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -26,7 +25,7 @@ export const signUp = async (req: Request, res: Response) => {
       password: hashedPassword,
       phone,
       address,
-      role, 
+      role,
     });
 
     if (user) {
@@ -34,7 +33,14 @@ export const signUp = async (req: Request, res: Response) => {
         success: true,
         statusCode: 200,
         message: 'User registered successfully',
-        data: user,
+        data: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          role: user.role,
+          address: user.address,
+        },
       });
     } else {
       res.status(500).json({
@@ -54,7 +60,7 @@ export const signUp = async (req: Request, res: Response) => {
   }
 };
 
-export const login = async (req: Request, res: Response) => {
+const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
@@ -101,4 +107,9 @@ export const login = async (req: Request, res: Response) => {
       error,
     });
   }
+};
+
+export const userController = {
+  signUp,
+  login,
 };

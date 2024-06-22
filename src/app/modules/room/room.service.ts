@@ -10,7 +10,7 @@ const findRoomByEmail = async (id: string) => {
   const result = await RoomModel.findById(id);
   return result;
 };
- 
+
 const findAllRooms = async () => {
   const result = await RoomModel.find({});
   return result;

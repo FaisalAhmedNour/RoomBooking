@@ -17,5 +17,4 @@ export const roomValidationSchema = z.object({
   capacity: z.number(),
   pricePerSlot: z.number(),
   amenities: z.array(z.string()),
-  isDeleted: z.boolean(),
 });

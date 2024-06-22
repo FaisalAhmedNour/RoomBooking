@@ -8,4 +8,3 @@ router.post('/', [auth, adminAuth], slotContollers.createSlot);
 router.get('/availability', auth, slotContollers.getSlot);
 
 export const slotRouter = router;
-  

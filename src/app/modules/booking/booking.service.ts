@@ -6,7 +6,7 @@ import { TBooking } from './booking.interface';
 
 const createBooking = async (booking: {
   room: string;
-  slots: string; 
+  slots: string;
   user: string;
   date: Date | object;
 }) => {
@@ -70,5 +70,5 @@ export const bookingService = {
   getAllBookings,
   getMyBookings,
   updateBookingById,
-  getBookingById
+  getBookingById,
 };

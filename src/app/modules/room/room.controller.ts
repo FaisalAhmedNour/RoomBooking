@@ -51,7 +51,16 @@ const createRoom = async (req: Request, res: Response) => {
         success: true,
         statusCode: 200,
         message: 'Room added successfully',
-        data: room,
+        data: {
+          _id: room._id,
+          name: room.name,
+          roomNo: room.roomNo,
+          floorNo: room.floorNo,
+          capacity: room.capacity,
+          pricePerSlot: room.pricePerSlot,
+          amenities: room.amenities,
+          isDeleted: room.isDeleted,
+        },
       });
     } else {
       res.status(500).json({
@@ -89,7 +98,16 @@ const getRoom = async (req: Request, res: Response) => {
       success: true,
       statusCode: 200,
       message: 'Room retrieved successfully',
-      data: room,
+      data: {
+        _id: room._id,
+        name: room.name,
+        roomNo: room.roomNo,
+        floorNo: room.floorNo,
+        capacity: room.capacity,
+        pricePerSlot: room.pricePerSlot,
+        amenities: room.amenities,
+        isDeleted: room.isDeleted,
+      },
     });
   } catch (error) {
     res.status(500).json({
@@ -121,7 +139,16 @@ const updateRoom = async (req: Request, res: Response) => {
       success: true,
       statusCode: 200,
       message: 'Room updated successfully',
-      data: room,
+      data: {
+        _id: room._id,
+        name: room.name,
+        roomNo: room.roomNo,
+        floorNo: room.floorNo,
+        capacity: room.capacity,
+        pricePerSlot: room.pricePerSlot,
+        amenities: room.amenities,
+        isDeleted: room.isDeleted,
+      },
     });
   } catch (error) {
     res.status(500).json({

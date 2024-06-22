@@ -13,12 +13,20 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
 // routes
-app.use('/api/user', user_route_1.userRouter);
+app.use('/api/auth', user_route_1.userRouter);
 app.use('/api/rooms', room_route_1.roomRouter);
 app.use('/api/slots', slot_route_1.slotRouter);
 app.use('/api/bookings', booking_route_1.bookingRouter);
+app.use('/api/my-bookings', booking_route_1.bookingUserRouter);
 const getAController = (req, res) => {
-    res.send("server is Running...");
+    res.send('server is Running...');
 };
 app.get('/', getAController);
+app.use('*', (req, res) => {
+    res.status(404).json({
+        success: false,
+        statusCode: 404,
+        message: 'Not Found',
+    });
+});
 exports.default = app;

@@ -10,7 +10,7 @@ router.get('/', [auth, adminAuth], bookingContollers.getBookings);
 router.put('/:id', [auth, adminAuth], bookingContollers.updateBookingById);
 router.delete('/:id', [auth, adminAuth], bookingContollers.deleteBookingById);
 
-export const bookingRouter = router; 
+export const bookingRouter = router;
 
 // 2
 const router2 = express.Router();
@@ -18,4 +18,3 @@ const router2 = express.Router();
 router2.get('/', [auth], bookingContollers.getMyBookings);
 
 export const bookingUserRouter = router2;
- 

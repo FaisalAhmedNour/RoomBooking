@@ -1,6 +1,7 @@
+import { TSlot } from './slot.interface';
 import SlotModel from './slot.model';
 
-const createSlots = async (slot: any) => {
+const createSlots = async (slot: Partial<TSlot>) => {
   const result = await SlotModel.create(slot);
   return result;
 };
@@ -12,9 +13,7 @@ const findSlotsByDateAndRoomId = async ({
   room?: string;
   date?: string;
 }) => {
-  const query: { isBooked: boolean; room?: string; date?: string } = {
-    isBooked: true,
-  };
+  const query: { room?: string; date?: string } = {};
 
   if (room) {
     query.room = room;
